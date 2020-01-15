@@ -9,7 +9,8 @@ RUN chmod +x jfrog
 RUN ./jfrog rt config --user=$REPO_USERNAME_VAR --password=$REPO_PASSWORD_VAR --url=https://repo.hexeption.co.uk/artifactory
 RUN ./jfrog rt dl "Magma/org/magmafoundation/magma/api/*.jar" "magma-api.jar" --sort-by=created --sort-order=desc  --limit=1
 RUN ls
-COPY org/magmafoundation/magma/api/**/*.jar /app/magma-api.jar
+WORKDIR app/
+COPY /build/org/magmafoundation/magma/api/**/*.jar /app/magma-api.jar
 ENTRYPOINT ["/usr/bin/java"]
 CMD ["-jar", "/app/magma-api.jar"]
 
