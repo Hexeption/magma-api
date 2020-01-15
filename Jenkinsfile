@@ -11,7 +11,10 @@ pipeline {
     }
     stage('Build-Docker') {
         steps {
-          docker.build("magmafoundation/magma-api")
+          script {
+            def magmaImage = docker.build("magma-api:${env.BUILD_ID}")
+            magmaImage.push()
+          }
         }
       }
     stage('Release') {
