@@ -9,6 +9,11 @@ pipeline {
         sh './gradlew build --console=plain'
       }
     }
+    stage('Build-Docker') {
+        steps {
+          docker.build("magmafoundation/magma-api")
+        }
+      }
     stage('Release') {
       when {
           not {

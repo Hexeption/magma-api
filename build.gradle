@@ -2,10 +2,13 @@ plugins {
     id 'org.springframework.boot' version '2.2.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
+    id 'maven-publish'
 }
 
+ext.buildNumber = System.env.BUILD_NUMBER ?: '0'
+
 group = 'org.magmafoundation.magma'
-version = '0.0.1-SNAPSHOT'
+version = "0.0.$buildNumber-SNAPSHOT"
 sourceCompatibility = '11'
 
 configurations {
@@ -23,17 +26,34 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.2.2.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest:2.2.2.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.2.2.RELEASE'
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.2.2.RELEASE'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.2.RELEASE') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 }
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            url = 'https://repo.hexeption.co.uk/artifactory/Magma/'
+            credentials {
+                username = System.getenv("REPO_USERNAME")
+                password = System.getenv("REPO_PASSWORD")
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+        }
+    }
 }
