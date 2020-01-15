@@ -37,6 +37,7 @@ pipeline {
     }
     stage('docker-build') {
       steps {
+        unstash "build"
         script {
           dockerImage = docker.build "hexeption/magma-api" + ":$BUILD_NUMBER"
           dockerImage.push()
