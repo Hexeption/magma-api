@@ -23,11 +23,6 @@ pipeline {
          reuseNode true
          }
       }
-      when {
-          not {
-              changeRequest()
-          }
-      }
       steps {
         unstash "build"
         withCredentials([string(credentialsId: 'REPO_USERNAME', variable: 'REPO_USERNAME'),string(credentialsId: 'REPO_PASSWORD', variable: 'REPO_PASSWORD')]) {
@@ -39,9 +34,11 @@ pipeline {
       agent none
       steps {
         unstash "build"
-        script {
-          dockerImage = docker.build "hexeption/magma-api" + ":$BUILD_NUMBER"
-          dockerImage.push()
+        withCredentials([string(credentialsId: 'REPO_USERNAME', variable: 'REPO_USERNAME'),string(credentialsId: 'REPO_PASSWORD', variable: 'REPO_PASSWORD')]) {
+          script {
+            dockerImage = docker.build "hexeption/magma-api" + ":$BUILD_NUMBER"
+            dockerImage.push()
+          }
         }
       }
     }
