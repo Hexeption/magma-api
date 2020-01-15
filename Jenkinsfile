@@ -7,7 +7,7 @@ pipeline {
   stages {
     stage('build') {
       agent {
-        docker {image 'openjdk:11-alpine'}
+        docker { image "openjdk:11-jdk" }
       }
       steps {
         sh 'chmod +x gradlew'
@@ -16,7 +16,7 @@ pipeline {
     }
     stage('maven-publish') {
       agent {
-        docker {image 'openjdk:11-alpine'}
+        docker { image "openjdk:11-jdk" }
       }
       when {
           not {
