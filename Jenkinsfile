@@ -33,6 +33,12 @@ pipeline {
         withCredentials([string(credentialsId: 'REPO_USERNAME', variable: 'REPO_USERNAME'),string(credentialsId: 'REPO_PASSWORD', variable: 'REPO_PASSWORD')]) {
           sh 'chmod +x gradlew && ./gradlew publish --console=plain --no-daemon'
         }
+      }
+    }
+    stage('docker-build') {
+      agent none
+      steps {
+        unstash "build"
         script {
           dockerImage = docker.build "hexeption/magma-api" + ":$BUILD_NUMBER"
           dockerImage.push()
