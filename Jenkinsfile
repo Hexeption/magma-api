@@ -13,7 +13,7 @@ pipeline {
         checkout scm
         sh 'chmod +x gradlew'
         sh './gradlew build'
-        stash includes: "./build/**", name: "build"
+        stash includes: "**/build/libs/*.jar", name: "build"
       }
     }
     stage('maven-publish') {
