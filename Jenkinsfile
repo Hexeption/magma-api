@@ -10,8 +10,10 @@ pipeline {
         docker { image "openjdk:11-jdk" }
       }
       steps {
+        checkout scm
         sh 'chmod +x gradlew'
         sh './gradlew build'
+        stash includes: "./build", name: "build"
       }
     }
     stage('maven-publish') {
@@ -27,6 +29,7 @@ pipeline {
           }
       }
       steps {
+        unstash "build"
         withCredentials([string(credentialsId: 'REPO_USERNAME', variable: 'REPO_USERNAME'),string(credentialsId: 'REPO_PASSWORD', variable: 'REPO_PASSWORD')]) {
           sh 'chmod +x gradlew && ./gradlew publish --console=plain'
         }
