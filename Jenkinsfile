@@ -11,11 +11,10 @@ pipeline {
     }
     stage('Build-Docker') {
         steps {
-          script {
-           def dockerHome = tool 'myDocker'
-            env.PATH = "${dockerHome}/bin:${env.PATH}"
-            def magmaImage = myDocker.build("magma-api:${env.BUILD_ID}")
-            magmaImage.push()
+          node {
+              checkout scm
+              def magmaImage = docker.build("magma-api:${env.BUILD_ID}")
+              magmaImage.push()
           }
         }
       }
