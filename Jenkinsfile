@@ -9,6 +9,10 @@ pipeline {
         sh './gradlew build --console=plain'
       }
     }
+   stage('Initialize'){
+        def dockerHome = tool 'myDocker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
+    }
     stage('Build-Docker') {
         steps {
           script {
