@@ -16,7 +16,10 @@ pipeline {
     }
     stage('maven-publish') {
       agent {
-        docker { image "openjdk:11-jdk" }
+        docker {
+         image "openjdk:11-jdk"
+         reuseNode true
+         }
       }
       when {
           not {
