@@ -12,7 +12,7 @@ pipeline {
       steps {
         checkout scm
         sh 'chmod +x gradlew'
-        sh './gradlew build'
+        sh './gradlew build --no-daemon'
         stash includes: "**/build/libs/*.jar", name: "build"
       }
     }
@@ -31,13 +31,8 @@ pipeline {
       steps {
         unstash "build"
         withCredentials([string(credentialsId: 'REPO_USERNAME', variable: 'REPO_USERNAME'),string(credentialsId: 'REPO_PASSWORD', variable: 'REPO_PASSWORD')]) {
-          sh 'chmod +x gradlew && ./gradlew publish --console=plain'
+          sh 'chmod +x gradlew && ./gradlew publish --console=plain --no-daemon'
         }
-      }
-    }
-    stage('docker-build') {
-      steps {
-        unstash "build"
         script {
           dockerImage = docker.build "hexeption/magma-api" + ":$BUILD_NUMBER"
           dockerImage.push()
