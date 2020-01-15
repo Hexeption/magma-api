@@ -31,9 +31,7 @@ pipeline {
       }
     }
     stage('docker-build') {
-      agent none
       steps {
-        unstash "build"
         withCredentials([string(credentialsId: 'REPO_USERNAME', variable: 'REPO_USERNAME'),string(credentialsId: 'REPO_PASSWORD', variable: 'REPO_PASSWORD')]) {
           script {
             dockerImage = docker.build "hexeption/magma-api" + ":$BUILD_NUMBER"
