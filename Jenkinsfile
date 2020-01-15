@@ -1,24 +1,23 @@
 pipeline {
-  agent {
-    docker { image "openjdk:11-jdk" }
+  agent none
+  environment {
+    dockerImage = ''
   }
+
   stages {
-    stage('Build') {
+    stage('build') {
+      agent {
+        docker {image 'openjdk:11-alpine'}
+      }
       steps {
         sh 'chmod +x gradlew'
-        sh './gradlew build --console=plain'
+        sh './gradlew build'
       }
     }
-    stage('Build-Docker') {
-        steps {
-          node {
-              checkout scm
-              def magmaImage = docker.build("magma-api:${env.BUILD_ID}")
-              magmaImage.push()
-          }
-        }
+    stage('maven-publish') {
+      agent {
+        docker {image 'openjdk:11-alpine'}
       }
-    stage('Release') {
       when {
           not {
               changeRequest()
@@ -30,11 +29,12 @@ pipeline {
         }
       }
     }
-  }
-  post {
-    always {
-      script {
-        archiveArtifacts artifacts: 'build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true, allowEmptyArchive: true
+    stage('docker-build') {
+      steps {
+        script {
+          dockerImage = docker.build "hexeption/magma-api" + ":$BUILD_NUMBER"
+          dockerImage.push()
+        }
       }
     }
   }
