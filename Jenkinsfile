@@ -14,7 +14,7 @@ pipeline {
           script {
            def dockerHome = tool 'myDocker'
             env.PATH = "${dockerHome}/bin:${env.PATH}"
-            def magmaImage = docker.build("magma-api:${env.BUILD_ID}")
+            def magmaImage = myDocker.build("magma-api:${env.BUILD_ID}")
             magmaImage.push()
           }
         }
