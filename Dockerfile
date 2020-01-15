@@ -1,5 +1,9 @@
 FROM alpine:edge
 MAINTAINER magmafoundation.org
+ARG REPO_USERNAME_VAR
+ENV REPO_USERNAME=$REPO_USERNAME_VAR
+ARG REPO_PASSWORD_VAR
+ENV REPO_PASSWORD=$REPO_PASSWORD_VAR
 RUN echo $REPO_USERNAME
 RUN apk add --no-cache openjdk11 curl
 WORKDIR build/
@@ -10,5 +14,6 @@ RUN ./jfrog rt dl "Magma/org/magmafoundation/magma/api/*.jar" "magma-api.jar" --
 COPY org/magmafoundation/magma/api/**/**.jar /app/magma-api.jar
 ENTRYPOINT ["/usr/bin/java"]
 CMD ["-jar", "/app/magma-api.jar"]
+
 EXPOSE 8080
 
