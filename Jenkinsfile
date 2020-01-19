@@ -12,7 +12,7 @@ pipeline {
         steps {
           withCredentials([file(credentialsId: 'ssh-main', variable: 'KEY_FILE')]) {
               sh "mkdir ~/.ssh/ && cat ${KEY_FILE} > ~/.ssh/host && chmod 600 ~/.ssh/host"
-              sh "ssh -vvv -o StrictHostKeyChecking=no -i ~/.ssh/host root@dedi.hexeption.co.uk 'docker stop magma-api && docker rm magma-api docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:20'"
+              sh "ssh -vvv -o StrictHostKeyChecking=no -i ~/.ssh/host root@dedi.hexeption.co.uk 'docker stop magma-api && docker rm magma-api && docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:20'"
           }
         }
       }
