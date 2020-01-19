@@ -49,9 +49,9 @@ pipeline {
             sh """
         ssh -vv root@dedi.hexeption.co.uk echo testing connection || true
         ssh-add -L
-        docker stop magma-api
-        docker rm magma-api
-        docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:$BUILD_NUMBER
+        ssh -vv root@dedi.hexeption.co.uk docker stop magma-api
+        ssh -vv root@dedi.hexeption.co.uk docker rm magma-api
+        ssh -vv root@dedi.hexeption.co.uk docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:$BUILD_NUMBER
         """
         }
       }
