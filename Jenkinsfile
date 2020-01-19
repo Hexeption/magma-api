@@ -42,9 +42,7 @@ pipeline {
     }
     stage('publish') {
       steps {
-        script {
-         docker.image("hexeption/magma-api:$BUILD_NUMBER").withRun('-p 2732:8080')
-        }
+        sh "docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:$BUILD_NUMBER"
       }
     }
   }
