@@ -10,7 +10,7 @@ pipeline {
           docker { image "openjdk:11-jdk" }
         }
         steps {
-          withCredentials([sshUserPrivateKey(credentialsId: '0926ae9f-2006-4164-bdf2-935caf03cb83', keyFileVariable: 'KEY_FILE')]) {
+          withCredentials([file(credentialsId: 'ssh-main', variable: 'KEY_FILE')]) {
               sh "mkdir ~/.ssh/ && cat ${KEY_FILE} > ~/.ssh/host"
               sh "ssh -i ~/.ssh/host root@dedi.hexeption.co.uk 'docker stop magma-api && docker rm magma-api docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:20'"
           }
