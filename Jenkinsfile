@@ -8,9 +8,9 @@ pipeline {
   stage('publish') {
         agent none
         steps {
-          sh docker stop magma-api
-          sh docker rm magma-api
-          sh docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:20
+          sh "docker stop magma-api"
+          sh "docker rm magma-api"
+          sh "docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:20"
       }
 
     stage('build') {
