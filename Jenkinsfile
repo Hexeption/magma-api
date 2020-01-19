@@ -11,7 +11,7 @@ pipeline {
         }
         steps {
           withCredentials([sshUserPrivateKey(credentialsId: '0926ae9f-2006-4164-bdf2-935caf03cb83', keyFileVariable: 'KEY_FILE')]) {
-              sh "eval `ssh-agent -s` && ssh-add ${KEY_FILE} && ssh-add -L && docker stop magma-api && docker rm magma-api &&  docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:20"
+              sh "eval `ssh-agent -s` && ssh-add ${KEY_FILE} && ssh-add -L && ssh root@dedi.hexeption.co.uk 'docker stop magma-api' && ssh root@dedi.hexeption.co.uk 'docker rm magma-api' &&  ssh root@dedi.hexeption.co.uk 'docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:20'"
           }
         }
       }
