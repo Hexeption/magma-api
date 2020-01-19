@@ -12,7 +12,7 @@ pipeline {
         steps {
           sshagent(credentials : ['0926ae9f-2006-4164-bdf2-935caf03cb83']) {
               sh '''
-          ssh -vv myuser@myserver echo testing connection || true
+          ssh -vv root@dedi.hexeption.co.uk echo testing connection || true
           ssh-add -L
           echo done running remote windows test
           '''
