@@ -40,5 +40,12 @@ pipeline {
         }
       }
     }
+    stage('docker-build') {
+      steps {
+        script {
+         docker.image("hexeption/magma-api:$BUILD_NUMBER").withRun('-p 2732:8080')
+        }
+      }
+    }
   }
 }
