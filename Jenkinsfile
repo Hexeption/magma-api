@@ -42,7 +42,10 @@ pipeline {
     }
     stage('publish') {
       steps {
-        sh "docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:$BUILD_NUMBER"
+        sshagent(credentials : ['host-pem']) {
+          sh 'ssh -v root@dedi.hexeption.co.uk'
+          sh "docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:$BUILD_NUMBER"
+        }
       }
     }
   }
