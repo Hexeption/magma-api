@@ -5,20 +5,6 @@ pipeline {
   }
 
   stages {
-  stage('publish') {
-        agent {
-          docker { image "openjdk:11-jdk" }
-        }
-        steps {
-          sshagent(credentials : ['0926ae9f-2006-4164-bdf2-935caf03cb83']) {
-              sh '''
-          ssh -vv root@dedi.hexeption.co.uk echo testing connection || true
-          ssh-add -L
-          echo done running remote windows test
-          '''
-          }
-        }
-      }
     stage('build') {
       agent {
         docker { image "openjdk:11-jdk" }
@@ -54,6 +40,21 @@ pipeline {
         }
       }
     }
-
+    stage('publish') {
+      agent {
+        docker { image "openjdk:11-jdk" }
+      }
+      steps {
+        sshagent(credentials : ['0926ae9f-2006-4164-bdf2-935caf03cb83']) {
+            sh """
+        ssh -vv root@dedi.hexeption.co.uk echo testing connection || true
+        ssh-add -L
+        docker stop magma-api
+        docker rm magma-api
+        docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:$BUILD_NUMBER
+        """
+        }
+      }
+    }
   }
 }
