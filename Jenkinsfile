@@ -41,6 +41,9 @@ pipeline {
       }
     }
     stage('publish') {
+      agent {
+        docker { image "openjdk:11-jdk" }
+      }
       steps {
         sshagent(credentials : ['host-pem']) {
           sh 'ssh -v root@dedi.hexeption.co.uk'
