@@ -11,8 +11,11 @@ pipeline {
         }
         steps {
           sshagent(credentials : ['0926ae9f-2006-4164-bdf2-935caf03cb83']) {
-            sh 'ssh -v root@dedi.hexeption.co.uk'
-            sh "docker run -d --name magma-api -p 1394:8080 hexeption/magma-api:$BUILD_NUMBER"
+              sh '''
+          ssh -vv myuser@myserver echo testing connection || true
+          ssh-add -L
+          echo done running remote windows test
+          '''
           }
         }
       }
